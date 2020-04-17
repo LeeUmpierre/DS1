@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Exemplo 16 - Notacao de Objetos</title>
+    <script type="text/javascript">
+
+        function criar() {
+            console.log('Criando Objetos');
+
+            //JSON ({...})= JavaScript Object Notation
+            var objeto = {
+                nome: 'Lee Umpierre',
+                idade: 18
+            };
+
+            return objeto;
+        }
+
+        function testar() {
+            var cliente = criar();
+            //cliente.nome = pega nome dentro do object
+            alert('Nome: ' + cliente.nome + '\n' + 'Idade: ' + cliente.idade);
+        }
+
+    </script>
+</head>
+
+<body>
+    <button role="button" onclick="testar()">Gerar</button>
+
+</body>
+
+</html>

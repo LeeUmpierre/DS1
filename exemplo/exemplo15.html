@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Exemplo 15 - Funcao que chama funcao</title>
+    <script type="text/javascript">
+        //retorna mensagem qualquer
+        function mensagem(){
+            return "Teste de mensagem";
+        }
+        //Retorna mensagem
+        function testar() {
+            var msg = mensagem();
+            
+            console.log(msg);
+            alert(mensagem());
+        }
+
+    </script>
+</head>
+
+<body>
+    <button role="button" onclick="testar()">Gerar</button>
+          
+</body>
+
+</html>
