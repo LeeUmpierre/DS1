@@ -1,0 +1,14 @@
+.table{
+    margin: 20px;
+}
+thead .btn-link {
+    color:#fff;
+}
+thead .btn-link-hover{
+    color: #fff;
+}
+
+thead .active{
+    text-decoration: undeline;
+    font-weight: bold;
+}
