@@ -1,74 +1,75 @@
-//controla Js dentro de um escopo
 (function (app) {
     'use strict';
 
     app.controller('ClienteController', function ($scope, ClienteService) {
+        //Controle para OrderBy e Filter
+        $scope.decrescente = false;
+        $scope.selectedColumn = 'id';
 
-        $scope.filterColumn = 'nome';
-        $scope.setFilterColumn = function (columnName) {
-            $scope.filterColumn = columnName;
+        //Controle de exibição da tabela/formulario
+        $scope.showTable = true;
+
+
+
+        //Seta a coluna para ser filtrada/ordenada
+        $scope.setColumn = function (columnName) {
+            $scope.selectedColumn = columnName;
+
+            //determina o ordenação decrescente (false)
+            $scope.decrescente = !$scope.decrescente;
         }
+
+        //Retornar para o FILTER qual a coluna será utilizada na ordenação/filtro
         $scope.filter = function () {
             var filtro = {};
-            filtro[filterColumn] = textFilter;
 
+            filtro[$scope.selectedColumn] = $scope.textFilter;
 
             return filtro;
         }
 
-        //Carrega uma lista de clientes
-        //Promise
-        //then = operacao finalizada
-        ClienteService.listar().then(function (result) {//controla Js dentro de um escopo
-            (function (app) {
-                'use strict';
-
-                app.controller('ClienteController', function ($scope, ClienteService) {
-
-                    $scope.decrescente = false;
-                    $scope.selectedColumn = 'nome';
-
-                    $scope.setColumn = function (columnName) {
-                        $scope.selectedColumn = columnName;
-
-                        //determina o ordenação decrescente (false)
-                        $scope.decrescente = !$scope.decrescente;
-                    }
-
-                    $scope.filter = function () {
-                        var filtro = {};
-
-                        filtro[$scope.selectedColumn] = $scope.textFilter;
-
-                        return filtro;
-                    }
-
-                    //Carrega uma lista de clientes
-
-                    //Promise
-                    //then = operacao finalizada
-                    ClienteService.listar().then(function (result) {
-                        $scope.clientes = result.data;
-                    }).catch(function (error) {
-                        if (error.status == 404) {
-                            $scope.msgerro = 'O recurso não foi encontrado';
-                        } else {
-                            $scope.msgerro = error.statusText;
-                        }
-
-                    });
-
-                });
-
-            })(appJS);
-            $scope.clientes = result.data;
-            //catch = pega erro
-        }).catch(function (error) {
-            if (error.status == 404) {
-                $scope.msgerro = 'O recurso não foi encontrado';
-            } else {
-                $scope.msgerro = error.statusText;
+        //Prepara a tela para um novo cadastro
+        $scope.novo = function () {
+            //Representar o cliente atual
+            $scope.cliente = {
+                nome: '',
+                email: '',
+                cidade: '',
+                estado: ''
             }
+
+            $scope.showTable = false;
+        }
+
+        //Cancelar
+        $scope.cancelar = function () {
+            $scope.showTable = true;
+        }
+
+        //Salvar a inclusão/edição do cliente
+        $scope.salvar = function () {
+            ClienteService.salvar().then(function (result) {
+                $scope.showTable = true;
+            });
+            
+        }
+        
+        //Editar
+        $scope.editar = function (cliente) {
+            $scope.clientes = cliente;
+            $scope.showTable = false;
+        }
+
+        //Excluir
+        $scope.excluir = function(){
+            ClienteService.remover($scope.cliente).then(function(result){
+                $scope.showTable = true;
+            });
+        }
+
+        //Carrega uma lista de clientes
+        ClienteService.listar().then(function (result) {
+            $scope.clientes = result.data;
 
         });
 

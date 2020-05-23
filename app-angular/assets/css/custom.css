@@ -1,14 +1,20 @@
-.table{
-    margin: 20px;
+.table {
+    margin-top: 20px;
 }
 thead .btn-link {
-    color:#fff;
-}
-thead .btn-link-hover{
     color: #fff;
 }
-
-thead .active{
-    text-decoration: undeline;
+thead .btn-link:hover {
+    color: #fff;
+}
+thead .active {
+    text-decoration: underline;
     font-weight: bold;
+}
+.card-header,
+.card-footer {
+    display: flex;
+}
+.spacer {
+    flex: 1 1 auto;
 }
