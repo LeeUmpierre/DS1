@@ -5,52 +5,46 @@
         const deferred = $q.defer();
 
         function loadJSON() {
-            //return $http.get('https://my.api.mockaroo.com/clientes.json?key=d66f5df0');
-            //return $http.get('data/clientes.json');
-            //reject = erro/ resolve = sucesso
-            //deferred.reject({statusText:'Deu pau'});
             deferred.resolve({ data: $localStorage.clientes || [] });
 
-
             return deferred.promise;
-
         }
 
         function save(cliente) {
             var dados = $localStorage.clientes || [];
-            if (!cliente.id) {
 
-                //ultimo registro
+            if (!cliente.id) {
+                //Pega o ultimo registro
                 var ultimo = dados[dados.length - 1];
 
-                /*
-                operador ternario
-                Variavel = teste_logico ? entao : senao;
-                */
-
-                //incrementa valor de id o ultimo registro
+                //Incrementa o valor de ID o ultimo registro
                 cliente.id = ultimo ? ultimo.id + 1 : 1;
 
+                //Adiciona o cliente no vetor
                 dados.push(cliente);
+
+                //Devolve o vetor para o localstorage
                 $localStorage.clientes = dados;
             }
 
-
-
             deferred.resolve(cliente);
+
             return deferred.promise;
         }
 
-        function remove(cliente){
+        function remove( cliente ) {
             var dados = $localStorage.clientes;
-            //procura o index do vetor do cliente q esta indo por parametro
-            var index = dados.indexOf(cliente);
-            //remove a partir do indice uma qtd de elementos(exemplo 1)
-            dados.splice(index, 1);
-            //Atualia local storage
+
+            //Procura o index do cliente que está vindo por parametro
+            var index = dados.indexOf( cliente );
+
+            //Remove a partir do indice uma qtdade de elementos, no caso 1
+            dados.splice(index, 1)
+
+            //Atualioza local storage
             $localStorage.clientes = dados;
 
-            deferred.resolve({data : dados});
+            deferred.resolve({data: dados});
             return deferred.promise;
         }
 
