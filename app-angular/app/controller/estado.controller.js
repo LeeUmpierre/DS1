@@ -1,59 +1,75 @@
-(function (app) {
+(function( app ){
     'use strict';
-
-    app.service('EstadoService', function ($q, $localStorage) {
-        const deferred = $q.defer();
-
-        function loadJSON() {
-            deferred.resolve({ data: $localStorage.estados || [] });
-
-            return deferred.promise;
-        }
-
-        function save(estado) {
-            var dados = $localStorage.estados || [];
-
-            if (!estado.id) {
-                //Pega o ultimo registro
-                var ultimo = dados[dados.length - 1];
-
-                //Incrementa o valor de ID o ultimo registro
-                estado.id = ultimo ? ultimo.id + 1 : 1;
-
-                //Adiciona o estado no vetor
-                dados.push(estado);
-
-                //Devolve o vetor para o localstorage
-                $localStorage.estados = dados;
-            }
-
-            deferred.resolve(estado);
-
-            return deferred.promise;
-        }
-
-        function remove( estado ) {
-            var dados = $localStorage.estados;
-
-            //Procura o index do estado que está vindo por parametro
-            var index = dados.indexOf( estado );
-
-            //Remove a partir do indice uma qtdade de elementos, no caso 1
-            dados.splice(index, 1)
-
-            //Atualioza local storage
-            $localStorage.estados = dados;
-
-            deferred.resolve({data: dados});
-            return deferred.promise;
-        }
-
-        return {
-            listar: loadJSON,
-            salvar: save,
-            remover: remove
-        }
-
+    
+    app.controller('EstadoController', function( $scope, EstadoService, $rootScope ){
+     //Sinaliza a página ativa
+     $rootScope.menuAtivo = 'estados';
+ 
+     //Controle para OrderBy e Filter
+     $scope.decrescente = false;
+     $scope.selectedColumn = 'id';
+ 
+     //Controle de exibição da tabela/formulario
+     $scope.showTable = true;
+ 
+     //Seta a coluna para ser filtrada/ordenada
+     $scope.setColumn = function ( columnName ){
+         $scope.selectedColumn = columnName;
+ 
+         //determina o ordenação decrescente (false)
+         $scope.decrescente = !$scope.decrescente;
+     }
+ 
+     //Retornar para o FILTER qual a coluna será utilizada na ordenação/filtro
+     $scope.filter = function() {
+         var filtro = {};
+ 
+         filtro[$scope.selectedColumn] = $scope.textFilter;
+ 
+         return filtro;
+     }
+ 
+     //Prepara a tela para um novo cadastro
+     $scope.novo = function() {
+         //Representar o estado atual
+         $scope.estado = {
+             nome: ''
+         }
+ 
+         $scope.showTable = false;
+     }
+ 
+     //Cancelar a inclusao/edicao
+     $scope.cancelar = function () {
+         $scope.showTable = true;
+     }
+ 
+     //Salvar a inclusão/edição do estado
+     $scope.salvar = function() {
+         EstadoService.salvar($scope.estado).then(function( result) {
+             $scope.showTable = true;
+         });
+         
+     }
+ 
+     //Editar o estado selecionado
+     $scope.editar = function(estado) {
+         $scope.estado = estado;
+         $scope.showTable = false;
+     }
+ 
+     //Excluir o estado selecionado
+     $scope.excluir = function() {
+         EstadoService.remover($scope.estado).then(function(result){
+             $scope.showTable = true;
+         });
+     }
+ 
+     //Carrega uma lista de estados
+     EstadoService.listar().then(function( result ){
+         $scope.estados = result.data;
+     });
+ 
     });
-
-})(appJS);
+ 
+ })( appJS );

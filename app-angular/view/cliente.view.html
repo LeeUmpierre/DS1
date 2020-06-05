@@ -59,7 +59,7 @@
                         <td>{{ cliente.nome  }}</td>
                         <td>{{ cliente.email }}</td>
                         <td>{{ cliente.cidade }}</td>
-                        <td>{{ cliente.estado }}</td>
+                        <td>{{ cliente.estado.nome }}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-warning" ng-click="editar(cliente)">Editar</button>
                         </td>
@@ -84,6 +84,11 @@
             <div class="form-group">
                 <label>Estado</label>
                 <input type="text" class="form-control" placeholder="Informe o estado" ng-model="cliente.estado">
+            </div>
+            {{estados}}
+            <div class="form-group">
+                <label>Estado</label>
+                <select class="form-control" ng-options="estado.nome for estado in estados track by estado.id" ng-model="cliente.estado"></select>
             </div>
         </div>
     </div>
